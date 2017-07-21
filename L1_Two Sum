@@ -25,10 +25,7 @@ public:
             if(j < nums.size())
                break ; 
         }
-        /*vector<int> result ;
-        result.push_back(i) ;
-        result.push_back(j) ;
-        return result ;*/
+
         return vector<int>{i,j} ;
     }
 };
