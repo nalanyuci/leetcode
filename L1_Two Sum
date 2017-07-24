@@ -58,6 +58,11 @@ vector<int> twoSum(vector<int> &numbers, int target)
 
 //hash table ，自己撰写
 //与2类似，但没有2耗时短
+//使用unordered_map ， 可达到2一样的耗时
+/*
+	map底层是红黑树实现的，因此它的find函数时间复杂度：O(logn)
+	而unordered_map底层是哈希表,因此它的find函数时间复杂度：O(l)
+*/
 vector<int> twoSum(vector<int> &numbers, int target)
 {
 	map<int,int> numAndIndex ;
