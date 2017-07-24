@@ -12,7 +12,7 @@ Example:
 
 
 My solution(C++) :
-
+//最容易想到的版本，但是耗时多
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
@@ -53,4 +53,19 @@ vector<int> twoSum(vector<int> &numbers, int target)
 		hash[numbers[i]] = i;
 	}
 	return result;
+}
+
+
+//hash table ，自己撰写
+//与2类似，但没有2耗时短
+vector<int> twoSum(vector<int> &numbers, int target)
+{
+	map<int,int> numAndIndex ;
+	for(int i = 0 ; i < numbers.size() ; i++){
+		int num = target - numbers[i] ;
+		map<int , int>::iterator it = numAndIndex.find(num) ;
+		if(it != numAndIndex.end())
+			return vector<int>{it->second , i} ;
+		numAndIndex.insert(pair<int,int>(numbers[i] , i)) ;
+	}
 }
