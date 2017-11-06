@@ -24,3 +24,39 @@ For example, according to the above table, we should output:
 
 
 -------------------------------------------------------------------------------------------------------------------------
+* 1.my SQL version :
+//2652 ms 100%
+//I'm shocked !!! But the time seems to be volatile .
+//NOTICE: format , and key words are capital !
+
+SELECT
+    name,population,area 
+FROM
+    World 
+WHERE
+    area > 3000000 OR population > 25000000
+;
+
+
+* 2.other SQL version :
+//Can't get the correct time . But it will be faster than using OR .
+//REFERENCE: 
+//Strictly speaking, Using UNION is faster when it comes to cases like scan two different column like this.
+//(Of course using UNION ALL is much faster than UNION since we don't need to sort the result. But it violates the requirements)
+
+SELECT 
+	name, population, area
+FROM 
+	World
+WHERE 
+	area > 3000000 
+
+UNION
+
+SELECT 
+	name, population, area
+FROM 
+	World
+WHERE 
+	population > 25000000
+;
