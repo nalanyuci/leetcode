@@ -10,7 +10,7 @@ Example:
 
 -------------------------------------------------------------------------------------------------------------------------
 
-1.Go version:
+* 1.Go version:
 //new 
 //use hash map
 //12ms 58.72%
@@ -36,7 +36,7 @@ func twoSum(nums []int, target int) []int {
 }
 
 
-2.My solution(C++) :
+* 2.My solution(C++) :
 //最容易想到的版本，但是耗时多
 //123 ms  32.6%
 
@@ -58,7 +58,7 @@ public:
 };
 
 
-3.other version(C++) :
+* 3.other version(C++) :
 //9ms 54.74%
 
 vector<int> twoSum(vector<int> &numbers, int target)
@@ -84,7 +84,7 @@ vector<int> twoSum(vector<int> &numbers, int target)
 }
 
 
-4.other version(C++) :
+* 4.other version(C++) :
 //hash table ，自己撰写
 //13ms 44.89%
 //与3类似，但没有3耗时短
