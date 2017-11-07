@@ -39,7 +39,7 @@ func hammingDistance(x int, y int) int {
 
 * 2. XOR version :
 //use & , get last bit of a number
-//use ^ , get whether two bits is different . same , 0 ; different , 1 .
+//use ^ , get whether two bits are different . same , 0 ; different , 1 .
 //use >>, get the rest number when remove last bit of a number . n>>1 is same as n/2 .
 
 func hammingDistance(x int, y int) int {
