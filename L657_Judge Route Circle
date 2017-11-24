@@ -1,0 +1,36 @@
+Initially, there is a Robot at position (0, 0). Given a sequence of its moves, judge if this robot makes a circle, 
+which means it moves back to the original place.
+
+The move sequence is represented by a string. And each move is represent by a character. 
+The valid robot moves are R (Right), L (Left), U (Up) and D (down). 
+The output should be true or false representing whether the robot makes a circle.
+
+Example 1:
+	Input: "UD"
+	Output: true
+Example 2:
+	Input: "LL"
+	Output: false
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version :
+//9ms 48.46%
+//so easy, but I think too much!!!
+
+func judgeCircle(moves string) bool {
+    num1, num2 := 0,0
+    moves_char := []rune(moves)
+    for i := range moves_char {
+        if moves_char[i] == 'R'{
+            num1++
+        } else if moves_char[i] == 'L' {
+            num1--
+        } else if moves_char[i] == 'U' {
+            num2++
+        } else {
+            num2--
+        }
+    }
+    return num1 == 0 && num2 == 0
+}
