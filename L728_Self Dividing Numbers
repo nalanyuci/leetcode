@@ -17,8 +17,7 @@ The boundaries of each input argument are 1 <= left <= right <= 10000.
 -------------------------------------------------------------------------------------------------------------------------
 
 * 1.my Go version :
-//
-//
+//3ms 13.33%
 
 func selfDividingNumbers(left int, right int) []int {
     result := make([]int,0)
