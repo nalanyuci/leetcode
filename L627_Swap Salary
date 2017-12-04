@@ -1,0 +1,50 @@
+Given a table salary, such as the one below, that has m=male and f=female values. 
+Swap all f and m values (i.e., change all f values to m and vice versa) with 
+a single update query and no intermediate temp table.
+
+For example:
+| id | name | sex | salary |
+|----|------|-----|--------|
+| 1  | A    | m   | 2500   |
+| 2  | B    | f   | 1500   |
+| 3  | C    | m   | 5500   |
+| 4  | D    | f   | 500    |
+After running your query, the above salary table should have the following rows:
+| id | name | sex | salary |
+|----|------|-----|--------|
+| 1  | A    | f   | 2500   |
+| 2  | B    | m   | 1500   |
+| 3  | C    | f   | 5500   |
+| 4  | D    | m   | 500    |
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my version :
+//523ms  35.61%
+//case when then else end
+//a little slowly , use ELSE instead of WHEN sex = 'm' THEN 'f , will be faster
+
+UPDATE salary 
+SET sex =
+CASE
+	WHEN sex = 'f' THEN 'm'
+	WHEN sex = 'm' THEN 'f'
+END
+;
+
+* 2.other CASE version :
+//431ms  85.89%
+
+UPDATE salary
+SET sex = 
+CASE sex
+    WHEN 'm' THEN 'f'
+    ELSE 'm'
+END;
+
+* 3.other XOR version :
+UPDATE salary 
+SET sex = CHAR(ASCII('f') ^ ASCII('m') ^ ASCII(sex));
+
+* 4.other IF version :
+UPDATE salary SET sex = IF(sex = 'm', 'f', 'm')
