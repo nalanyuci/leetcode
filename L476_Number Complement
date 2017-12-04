@@ -1,0 +1,54 @@
+Given a positive integer, output its complement number. 
+The complement strategy is to flip the bits of its binary representation.
+
+Note:
+The given integer is guaranteed to fit within the range of a 32-bit signed integer.
+You could assume no leading zero bit in the integer’s binary representation.
+
+Example 1:
+Input: 5
+Output: 2
+Explanation: The binary representation of 5 is 101 (no leading zero bits), 
+and its complement is 010. So you need to output 2.
+
+Example 2:
+Input: 1
+Output: 0
+Explanation: The binary representation of 1 is 1 (no leading zero bits), 
+and its complement is 0. So you need to output 0.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version :
+//0ms  17.39%
+
+func findComplement(num int) int {
+    result,square,temp := 0,1,num
+    if temp == 0 {
+        return 1
+    }
+    for ; temp != 0 ; {
+        if (temp & 1) == 0 {
+            result = result + square
+        }
+        square = square<<1
+        temp = temp>>1
+    }
+    return result
+}
+
+* 2.other Java version :
+//To find complement of num = 5 which is 101 in binary.
+First ~num gives ...11111010 but we only care about the rightmost 3 bits.
+Then to erase the 1s before 010 .
+
+0000 0000 0000 0000 0000 0000 0000 0101 // num=5
+1111 1111 1111 1111 1111 1111 1111 1010 // ~num
+0000 0000 0000 0000 0000 0000 0000 0100 // Integer.highestOneBit(num)
+0000 0000 0000 0000 0000 0000 0000 1000 // Integer.highestOneBit(num) << 1
+
+public class Solution {
+    public int findComplement(int num) {
+        return ~num & ((Integer.highestOneBit(num) << 1) - 1);
+    }
+}
