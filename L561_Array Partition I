@@ -1,0 +1,78 @@
+Given an array of 2n integers, your task is to group these integers into n pairs of integer, 
+say (a1, b1), (a2, b2), ..., (an, bn) which makes sum of min(ai, bi) for all i from 1 to n as large as possible.
+
+Example 1:
+Input: [1,4,3,2]
+
+Output: 4
+Explanation: n is 2, and the maximum sum of pairs is 4 = min(1, 2) + min(3, 4).
+Note:
+n is a positive integer, which is in the range of [1, 10000].
+All the integers in the array will be in the range of [-10000, 10000].
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version :
+//132ms  27.54%
+//first sort , and then sum odd positions' numbers
+//write bubble sort , but it is overtime
+//then use sort package which has been packaged
+
+import (
+    "sort"
+)
+func arrayPairSum(nums []int) int {
+    tempNums := nums
+    /*for i:=0; i<len(tempNums); i++ {
+        for j:=0; j<len(tempNums)-i-1; j++{
+            if tempNums[j]>tempNums[j+1] {
+                temp := tempNums[j]
+                tempNums[j] = tempNums[j+1]
+                tempNums[j+1] = temp
+            }
+        }
+    }*/
+    sort.Ints(tempNums)
+    result := 0
+    for i:= 0 ; i<len(tempNums)-1 ; i=i+2 {
+        result = result + tempNums[i]
+    }
+    return result
+}
+
+//others' explanation
+//The intuitive way of reasoning is that, to get the the sum of mins as large as possible, 
+we need to make the min numbers as large as possible. Essentially, 
+we're sacrificing large numbers by grouping them with the small numbers. 
+To make the small numbers as large as possible, 
+the best way is to group them with their adjacent large numbers.
+
+For example, (1, 3) and (2, 4) are not best pairs since you're sacrificing 3 by grouping it with 1. 
+(1, 2) and (3, 4) is better since now 3 is the MIN and can contribute to the sum.
+
+
+* 2.other Java version :
+//use Bucket sort
+
+public class Solution {
+
+	public int arrayPairSum(int[] nums) {
+		int[] exist = new int[20001];
+		for (int i = 0; i < nums.length; i++) {
+			exist[nums[i] + 10000]++;
+		}
+		int sum = 0;
+		boolean odd = true;
+		for (int i = 0; i < exist.length; i++) {
+			while (exist[i] > 0) {
+				if (odd) {
+					sum += i - 10000;
+				}
+				odd = !odd;
+				exist[i]--;
+			}
+		}
+		return sum;
+	}
+	
+}
