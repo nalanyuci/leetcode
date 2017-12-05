@@ -1,0 +1,121 @@
+Note: This is a companion problem to the System Design problem: Design TinyURL.
+TinyURL is a URL shortening service where you enter a URL such as https://leetcode.com/problems/design-tinyurl 
+and it returns a short URL such as http://tinyurl.com/4e9iAk.
+
+Design the encode and decode methods for the TinyURL service. 
+There is no restriction on how your encode/decode algorithm should work. 
+You just need to ensure that a URL can be encoded to a tiny URL and the tiny URL can be decoded to the original URL.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Java version :
+//12ms  44.89%
+//It's not so good .
+//test cases:
+    "https://leetcode.com/problems/design-tinyurl"
+    "http://airport.example.com/"
+encode:
+    "https://design-tinyurl/?88G6B786B@CEB5?8@F"
+    "http://airport.example.com/"
+
+public class Codec {
+
+    // Encodes a URL to a shortened URL.
+    public String encode(String longUrl) {
+        StringBuffer url = new StringBuffer() ;
+        String[] temp = longUrl.split("/") ;
+        if(temp.length <= 3 && longUrl.charAt(longUrl.length()-1) == '/'){
+            return longUrl ;
+        }
+        url.append(temp[0]).append(temp[1]).append("//") ;
+        String lastSen = "" ;
+        if(temp[temp.length-1] == "")
+            lastSen = temp[temp.length-2] ;
+        else
+            lastSen = temp[temp.length-1] ;
+        url.append(lastSen).append("/") ;
+        for(int i = 2 ; i < temp.length-1 ; i++) {
+            for(int j = 0 ; j < temp[i].length() ; j++) {
+                int letterValue = temp[i].charAt(j) - 45;
+                url.append((char)letterValue);
+            }
+            url.append((char)('/'-45)) ;
+        }
+        return url.toString() ;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    public String decode(String shortUrl) {
+        String[] temp = shortUrl.split("/") ;
+        if(temp.length <= 3 && shortUrl.charAt(shortUrl.length()-1) == '/'){
+            return shortUrl ;
+        }
+        StringBuffer url = new StringBuffer() ;
+        url.append(temp[0]).append(temp[1]).append("//") ;
+        String midSen = "" ;
+        if(temp.length > 1)
+            midSen = temp[temp.length-2] ;
+        String lastSen = temp[temp.length-1] ;
+        for(int i = 0 ; i < lastSen.length() ; i++) {
+            int key = (int)lastSen.charAt(i) ;
+            url.append((char)(key+45)) ;
+        }
+        url.append(midSen) ;
+        return url.toString() ;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.decode(codec.encode(url));
+
+* 2.other Java version :
+//Using simple counter
+//encode as 
+    http://tinyurl.com/0
+    http://tinyurl.com/1
+    http://tinyurl.com/2
+
+public class Codec {
+    Map<Integer, String> map = new HashMap<>();
+    int i=0;
+    public String encode(String longUrl) {
+        map.put(i,longUrl);
+        return "http://tinyurl.com/"+i++;
+    }
+    public String decode(String shortUrl) {
+        return map.get(Integer.parseInt(shortUrl.replace("http://tinyurl.com/", "")));
+    }
+}
+
+* 3.other Java version :
+//using hashcode
+
+public class Codec {
+    Map<Integer, String> map = new HashMap<>();
+    public String encode(String longUrl) {
+        map.put(longUrl.hashCode(),longUrl);
+        return "http://tinyurl.com/"+longUrl.hashCode();
+    }
+    public String decode(String shortUrl) {
+        return map.get(Integer.parseInt(shortUrl.replace("http://tinyurl.com/", "")));
+    }
+}
+
+* 4.other Java version :
+//using random function
+
+public class Codec {
+    Map<Integer, String> map = new HashMap<>();
+    Random r=new Random();
+    int key=r.nextInt(10000);
+    public String encode(String longUrl) {
+        while(map.containsKey(key))
+            key= r.nextInt(10000);
+        map.put(key,longUrl);
+        return "http://tinyurl.com/"+key;
+    }
+    public String decode(String shortUrl) {
+        return map.get(Integer.parseInt(shortUrl.replace("http://tinyurl.com/", "")));
+    }
+}
