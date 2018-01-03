@@ -1,0 +1,76 @@
+Given a string, you need to reverse the order of characters in each word within a sentence while 
+still preserving whitespace and initial word order.
+
+Example 1:
+Input: "Let's take LeetCode contest"
+Output: "s'teL ekat edoCteeL tsetnoc"
+
+Note: In the string, each word is separated by single space and there will not be any extra space in the string.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version :
+//56ms  37.25%
+
+func reverseWord(s string) string {
+    /* use extra memory
+    byteArray := []byte(s)
+    result := make([]byte,0)
+    for i := len(byteArray)-1 ; i >= 0 ; i-- {
+        result = append(result,byteArray[i])
+    }
+    return string(result)
+	*/
+    
+    byteArray := []byte(s)
+    n := len(byteArray) - 1
+    for i,j := n,0 ; i > j ; i,j = i-1,j+1 {
+        temp := byteArray[i]
+        byteArray[i] = byteArray[j]
+        byteArray[j] = temp
+    }
+    return string(byteArray)
+}
+
+func reverseWords(s string) string {
+    strArray := strings.Split(s," ") //string[]
+    result := ""
+    for i := range strArray {
+        result += reverseWord(strArray[i]) + " "
+    }
+    return strings.TrimSpace(result)
+}
+
+* 2.other java version :
+/*
+Step 1. Convert the string to char[] array
+Step 2. Whenever encounter a space ’ ’ , call the reverse function ( just to keep the code clean )
+Step 3. Repeat till the end!
+*/
+
+public String reverseWords(String s) 
+{
+    char[] s1 = s.toCharArray();
+    int i = 0;
+    for(int j = 0; j < s1.length; j++)
+    {
+        if(s1[j] == ' ')
+        {
+            reverse(s1, i, j - 1);
+            i = j + 1;
+        }
+    }
+    reverse(s1, i, s1.length - 1);  //reverse the last word !
+    return new String(s1);
+}
+
+public void reverse(char[] s, int l, int r)
+{
+	while(l < r)
+	{
+		char temp = s[l];
+		s[l] = s[r];
+		s[r] = temp;
+		l++; r--;
+	}
+}
