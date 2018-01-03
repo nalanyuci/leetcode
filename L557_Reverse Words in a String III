@@ -20,7 +20,7 @@ func reverseWord(s string) string {
         result = append(result,byteArray[i])
     }
     return string(result)
-	*/
+    */
     
     byteArray := []byte(s)
     n := len(byteArray) - 1
