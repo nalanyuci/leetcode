@@ -1,0 +1,82 @@
+Suppose you have a random list of people standing in a queue. 
+Each person is described by a pair of integers (h, k), 
+where h is the height of the person and k is the number of people in front of this person 
+who have a height greater than or equal to h. Write an algorithm to reconstruct the queue.
+
+Note:
+The number of people is less than 1,100.
+
+
+Example
+
+Input:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+
+Output:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version :
+//95ms  28.57%
+
+func reconstructQueue(people [][]int) [][]int {
+    for i := 0; i < len(people); i++ {
+        for j := 0; j < len(people)-i-1 ; j++ {
+            if (people[j][0] < people[j+1][0]) || (people[j][0] == people[j+1][0] && people[j][1] > people[j+1][1]) {
+                temp := people[j]
+                people[j] = people[j+1]
+                people[j+1] = temp
+            }
+        }
+    }   
+    result := make([][]int,0)
+    for i := 0; i < len(people); i++ {
+
+		//排序后，要insert的位置就是count的值（从0开始）
+		//insert值时，result的从count开始的值都后移一位
+        count := people[i][1]
+        result = append(result,[]int{0,0})
+        for k := len(result)-1 ; k > count ; k-- {
+            result[k] = result[k-1]
+        }
+        result[count] = people[i]
+	}			        
+    return result
+}
+
+* 2.other Go version :
+//55ms
+
+type PeopleSlice [][]int
+
+func (a PeopleSlice) Len() int {
+	return len(a)
+}
+
+func (a PeopleSlice) Swap(i int, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func (a PeopleSlice) Less(i int, j int) bool {
+	return a[i][0] > a[j][0] || (a[i][0] == a[j][0] && a[i][1] < a[j][1])
+}
+
+func insert(arr [][]int, from int, to int) {
+	tmp := arr[from]
+	for i := from; i > to; i-- {
+		arr[i] = arr[i-1]
+	}
+	arr[to] = tmp
+}
+
+func reconstructQueue(people [][]int) [][]int {
+	res := PeopleSlice(people)
+	sort.Sort(res)
+	for i := 0; i < len(res); i++ {
+		if res[i][1] < i {
+			insert(res, i, res[i][1])
+		}
+	}
+	return res
+}
