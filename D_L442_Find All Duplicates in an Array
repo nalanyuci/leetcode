@@ -44,7 +44,36 @@ func findDuplicates(nums []int) []int {
     return result
 }
 
-* 2.other Go version :
+* 2.other java version :
+The main idea is to use the index and negative sign to indicate if a number exists, 
+because index range [0, n - 1] can represents number range [1, n]
+
+// [4, 3, 2, 7, 8, 2, 3, 1]
+// [4, 3, 2, -7, 8, 2, 3, 1]
+// [4, -3, -2, -7, 8, 2, 3, 1]
+// [4, -3, -2, -7, 8, 2, -3, 1]
+// [4, -3, -2, -7, 8, 2, -3, -1]
+// [4, -3, -2, -7, 8, 2, -3, -1] add 2
+// [4, -3, -2, -7, 8, 2, -3, -1] add 3
+// [-4, -3, -2, -7, 8, 2, -3, -1]
+
+class Solution {
+    
+	public List<Integer> findDuplicates(int[] nums) {
+		List<Integer> res = new ArrayList<Integer>();
+
+		  for(int i = 0; i < nums.length; i++) {
+			int curNum = Math.abs(nums[i]);
+			
+			if(nums[curNum - 1] < 0) res.add(curNum);
+			else nums[curNum - 1] = - nums[curNum - 1];
+		  }
+		
+		  return res;
+    }
+}
+
+* 3.other Go version :
 
 func findDuplicates(nums []int) []int {
     l := len(nums)
@@ -65,7 +94,7 @@ func findDuplicates(nums []int) []int {
     return res
 }
 
-* 3.other Go version :
+* 4.other Go version :
 
 func findDuplicates(nums []int) []int {
     length := len(nums)
