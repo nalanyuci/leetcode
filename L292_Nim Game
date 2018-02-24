@@ -1,0 +1,66 @@
+You are playing the following Nim Game with your friend: There is a heap of stones on the table, 
+each time one of you take turns to remove 1 to 3 stones. 
+The one who removes the last stone will be the winner. 
+You will take the first turn to remove the stones.
+
+Both of you are very clever and have optimal strategies for the game. 
+Write a function to determine whether you can win the game given the number of stones in the heap.
+
+For example, if there are 4 stones in the heap, then you will never win the game: 
+no matter 1, 2, or 3 stones you remove, the last stone will always be removed by your friend.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version:
+//0ms
+
+func canWinNim(n int) bool {
+    if n % 4 == 0 {
+        return false
+    }
+    return true
+}
+
+* 2.other Go version:
+
+func canWinNim(n int) bool {
+	if n&3 == 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
+/*
+Reasoning:
+Let us think of the small cases. It is clear that if there are only one, two, 
+or three stones in the pile, and it is your turn, you can win the game by taking all of them.
+Like the problem description says, if there are exactly four stones in the pile, you will lose.
+Because no matter how many you take, you will leave some stones behind for your opponent to take and win the game. 
+So in order to win, you have to ensure that you never reach the situation where there are exactly four stones on the pile on your turn.
+
+Similarly, if there are five, six, or seven stones you can win by taking just enough to leave four stones 
+for your opponent so that they lose. But if there are eight stones on the pile, you will inevitably lose, 
+because regardless whether you pick one, two or three stones from the pile, your opponent can pick three, 
+two or one stone to ensure that, again, four stones will be left to you on your turn.
+
+It is obvious that the same pattern repeats itself for n=4,8,12,16,…n=4,8,12,16,…, basically all multiples of 44.
+*/
+
+/*
+Proof:
+1.The base case: when n = 4, as suggested by the hint from the problem, 
+no matter which number that that first player, the second player would always be able to pick the remaining number.
+
+2.For 1* 4 < n < 2 * 4, (n = 5, 6, 7), the first player can reduce the initial number into 4 accordingly, 
+which will leave the death number 4 to the second player. 
+i.e. The numbers 5, 6, 7 are winning numbers for any player who got it first.
+
+3.Now to the beginning of the next cycle, n = 8, no matter which number that the first player picks, 
+it would always leave the winning numbers (5, 6, 7) to the second player. 
+Therefore, 8 % 4 == 0, again is a death number.
+
+4.Following the second case, for numbers between (2*4 = 8) and (3*4=12), 
+which are 9, 10, 11, are winning numbers for the first player again, 
+because the first player can always reduce the number into the death number 8.
+*/
