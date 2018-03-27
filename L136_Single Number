@@ -1,0 +1,22 @@
+Given an array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my Go version:
+//12ms  100%
+/*
+   XXX ^ XXX = 0
+   XXX ^ 000 = XXX
+*/
+// 'result ^= nums[i]' is faster than 'result = result ^ nums[i]'
+
+func singleNumber(nums []int) int {
+    result := 0
+    for i := range nums {
+        result ^= nums[i]
+    }
+    return result
+}
