@@ -27,13 +27,21 @@ Your script should output the following valid phone numbers:
 
 grep -E "^([0-9]{3}-){2}[0-9]{4}$|^\([0-9]{3}\)\s[0-9]{3}-[0-9]{4}$" file.txt
 
--->it's ok, memory uses lesser
+grep -E ----> egrep
+
+-->it's ok, memory uses lesser.  "\d" should use -P
 grep -P "^(\d{3}-){2}\d{4}$|^\(\d{3}\)\s\d{3}-\d{4}$" file.txt
+
+  -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
+  -F, --fixed-strings       PATTERN is a set of newline-separated fixed strings
+  -G, --basic-regexp        PATTERN is a basic regular expression (BRE)
+  -P, --perl-regexp         PATTERN is a Perl regular expression
+  -e, --regexp=PATTERN      use PATTERN for matching
 
 
 * 2.others version:
 
-Using grep:
+Using grep: (good! same suffix)
 grep -P '^(\d{3}-|\(\d{3}\) )\d{3}-\d{4}$' file.txt
 
 Using sed:
@@ -41,3 +49,6 @@ sed -n -r '/^([0-9]{3}-|\([0-9]{3}\) )[0-9]{3}-[0-9]{4}$/p' file.txt
 
 Using awk:
 awk '/^([0-9]{3}-|\([0-9]{3}\) )[0-9]{3}-[0-9]{4}$/' file.txt
+
+* 3.use "grep -e"
+grep -e '^[0-9]\{3\}-[0-9]\{3\}-[0-9]\{4\}$' -e '^([0-9]\{3\}) [0-9]\{3\}-[0-9]\{4\}$' file.txt
