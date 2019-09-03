@@ -1,0 +1,74 @@
+Given a text file file.txt, transpose its content.
+
+You may assume that each row has the same number of columns and each field is separated by the ' ' character.
+
+Example:
+
+If file.txt has the following content:
+
+name age
+alice 21
+ryan 30
+Output the following:
+
+name alice ryan
+age 21 30
+
+-------------------------------------------------------------------------------------------------
+
+* 1.my version:
+//140ms, a little long
+
+len=`cat file.txt | wc -l`
+col=0
+line=0
+cat file.txt | while read myline
+do
+	i=0
+	col=$(($col+1))
+	for word in $myline;do
+		result[$i]=${result[$i]}" "$word
+		if [ $len == $col ]; then
+			echo ${result[$i]}
+		fi
+		i=$(($i+1))
+	done
+	line=$i
+done
+
+* 2.others version:
+
+awk '
+{
+    for (i = 1; i <= NF; i++) {
+        if (FNR == 1) {
+            t[i] = $i;
+        } else {
+            t[i] = t[i] " " $i
+        }
+    }
+}
+END {
+    for (i = 1; t[i] != ""; i++) {
+        print t[i]
+    }
+}
+' file.txt
+
+
+
+Here're some quick notes to help you understand:
+1.The code block with an "END" prefix is only executed after the last line is read;
+similarly, a code block with a "BEGIN" prefix will be executed before any line reads.
+
+2.AWK is line-based: the main code block (the code block without prefix) processes one line of input at a time.
+
+3.NR: a variable indicating the number of records (i.e. current line number) that's accumulated across multiple
+files read. FNR is similar to NR, but is reset for each file read. Since we only need to deal with one file in this question,
+either is fine to use.
+
+4.NF: a variable indicating the number of fields (i.e. number of "columns") on an input line.
+
+5.$i: the i-th field of the input line.
+
+6.t[]: an array for saving the transposed table. More on awk arrays here: http://www.grymoire.com/Unix/Awk.html#uh-22
