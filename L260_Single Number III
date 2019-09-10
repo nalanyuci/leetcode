@@ -1,0 +1,159 @@
+Given an array of numbers nums, in which exactly two elements appear only once and all the other elements appear exactly twice. 
+Find the two elements that appear only once.
+
+Example:
+
+Input:  [1,2,1,3,2,5]
+Output: [3,5]
+
+Note:
+
+The order of the result is not important. So in the above example, [5, 3] is also correct.
+Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?
+
+-------------------------------------------------------------------------------------------------------------------------
+
+* 1.my version:
+// 8ms, 58%
+// 4.2MB
+
+func singleNumber(nums []int) []int {
+    result := make([]int,0)
+    nums_temp := nums //最好不要这样赋值，发现nums_temp的值改动时nums的值也会改动
+	//result := make([]int,len(findNums))
+    
+    sort.Ints(nums_temp)
+    //排序后遍历到的每个数组元素，其实都是待判断是否跟后一个元素一样的
+    //毕竟相同的元素只会出现两次，故从前向后遍历时，只判断跟后一个元素是否一致即可
+    //不一致，则加入最后的result；一致，则向后推进两位，遍历下下个
+    for i := 0; i < len(nums_temp); i++{
+        if i == len(nums_temp)-1 {
+            result = append(result,nums_temp[i])       
+        } else {
+            if nums_temp[i] != nums_temp[i+1] {
+                result = append(result,nums_temp[i])
+            } else {
+                i = i + 1
+            }
+        }
+    }
+    return result
+}
+
+* 2.my version:
+// 8ms, 58%
+// 5MB
+
+func singleNumber(nums []int) []int {
+    result := make([]int,0)
+    nums_map := make(map[int]int)
+    for i := 0; i < len(nums); i++ {
+        nums_map[nums[i]]++
+    }
+    for k, v := range nums_map {
+        if v == 1 {
+            result = append(result,k)
+        }
+    }
+    return result
+}
+
+* 3.other C++ version:
+
+vector<int> singleNumber(vector<int>& nums) {
+    int aXorb = 0;  // the result of a xor b;
+    for (auto item : nums) aXorb ^= item;
+    int lastBit = (aXorb & (aXorb - 1)) ^ aXorb;  // the last bit that a diffs b
+    int intA = 0, intB = 0;
+    for (auto item : nums) {
+        // based on the last bit, group the items into groupA(include a) and groupB
+        if (item & lastBit) intA = intA ^ item;
+        else intB = intB ^ item;
+    }
+    return vector<int>{intA, intB};   
+}
+
+[VISUALIZATION]
+honestly, i really spent a lot of time to understand this. here is the visualization that i hope latecomers get the idea
+
+first run ^ to get the a^b
+search the position to do partitioning in binary representation of a^b
+partition the array by this position and get a and b correspondingly
+e.g. [1,2,1,3,2,5]
+
+1 = 001
+2 = 010
+1 = 001
+3 = 011
+2 = 010
+5 = 101
+
+after 1st step, we found out that a^b = 3^5 = 6 which is 110
+110 means that there are 2 digits on the left are different in binary representation of our result
+let's use any one of the digit to partition our array
+
+if we use the middle one, we can see that there are 2 sets of numbers that we can just use the simple single number to find 
+out the single in each partition
+1 = 001
+1 = 001
+5 = 101 ✅
+
+2 = 010
+2 = 010
+3 = 011 ✅
+
+if we use the leftmost one, we can still partition the array into the sets and do simple single number on it
+1 = 001
+2 = 010
+1 = 001
+3 = 011 ✅
+2 = 010
+
+5 = 101 ✅
+
+
+* 4.other C++ version:
+
+class Solution
+{
+public:
+    vector<int> singleNumber(vector<int>& nums) 
+    {
+        // Pass 1 : 
+        // Get the XOR of the two numbers we need to find
+        int diff = accumulate(nums.begin(), nums.end(), 0, bit_xor<int>());
+        // Get its last set bit
+        diff &= -diff;
+
+        // Pass 2 :
+        vector<int> rets = {0, 0}; // this vector stores the two numbers we will return
+        for (int num : nums)
+        {
+            if ((num & diff) == 0) // the bit is not set
+            {
+                rets[0] ^= num;
+            }
+            else // the bit is set
+            {
+                rets[1] ^= num;
+            }
+        }
+        return rets;
+    }
+};
+
+
+Finally understand it.
+
+1. Let a and b be the two unique numbers
+2. XORing all numbers gets you (a xor b)
+3. (a xor b) must be non-zero otherwise they are equal
+4. If bit_i in (a xor b) is 1, bit_i at a and b are different.
+5. Find bit_i using the low bit formula m & -m
+6. Partition the numbers into two groups: one group with bit_i == 1 and the other group with bit_i == 0.
+7. a is in one group and b is in the other.
+8. a is the only single number in its group.
+9. b is also the only single number in its group.
+10. XORing all numbers in a's group to get a
+11. XORing all numbers in b's group to get b
+12. Alternatively, XOR (a xor b) with a gets you b.
